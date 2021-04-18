@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// © 2020 VNEXT TRAINING
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -26,12 +26,12 @@ import com.example.demo.response.EBookResponse;
 /**
  * [OVERVIEW] E-Book Data Object Access Implementation.
  *
- * @author: (VNEXT)LinhDT
+ * @author: LinhDT
  * @version: 1.0
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2020/07/24      (VNEXT)LinhDT       Create new
+ * 001       1.0       2021/04/17      LinhDT             Create new
 */
 @Repository
 @Transactional
@@ -45,7 +45,7 @@ public class EBookDaoImpl implements EBookDao {
 
     /**
      * downloadEBookById
-     * @author: (VNEXT)LinhDT
+     * @author: LinhDT
      * @param bookId
      * @return
      */
@@ -122,7 +122,7 @@ public class EBookDaoImpl implements EBookDao {
 
     /**
      * getListEBooks
-     * @author: (VNEXT)LinhDT
+     * @author: LinhDT
      * @return
      */
     @SuppressWarnings("unchecked")

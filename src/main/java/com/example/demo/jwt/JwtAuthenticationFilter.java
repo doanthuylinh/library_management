@@ -45,18 +45,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            // Lấy jwt từ request
+            // Get JWT from request
             String jwt = getJwtFromRequest(request);
             if (Objects.isNull(jwt)) {
                 SecurityContextHolder.clearContext();
             }
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                // Lấy username từ chuỗi jwt
+                // Get username from the sequence of JWT
                 String username = tokenProvider.getUsernameFromJWT(jwt);
-                // Lấy thông tin người dùng từ username
+                // Get user information from username
                 UserDetails userDetails = userService.loadUserByUsername(username);
                 if (!Objects.isNull(userDetails)) {
-                    // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
+                    // If the user is valid, set information for Seturity Context
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                             userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        // Kiểm tra xem header Authorization có chứa thông tin jwt không
+        // Check whether header Authorization contains data of JWT
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

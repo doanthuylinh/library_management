@@ -65,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable() // Prevent request from another domain.
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/registration", "/api/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/book/{bookId}", "/api/getbookbyname", "/api/getbookbyauthor", "/api/getbookbycategory",
-                        "/api/getbookbypublicationdate", "/api/getbookitembybarcode", "/api/getlistbookitembybookid", "/api/ebook/{bookId}", "/api/ebook-list")
+                        "/api/getbookbypublicationdate", "/api/getbookitembybarcode", "/api/getlistbookitembybookid", "/api/ebook/{bookId}", "/api/ebook-list",
+                        "/api/categories-list", "/api/departments-list")
                 .permitAll().anyRequest().authenticated();
         // Except for the API(s) above, all other requests must be verified before access.
         // Add another class of Filter to check JSON Web Tokens.

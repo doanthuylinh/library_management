@@ -40,6 +40,12 @@ public class BookController {
 
     private static final Logger LOGGER = LogManager.getLogger(BookController.class);
 
+    /**
+     * getBookById
+     * @author: LinhDT
+     * @param bookId
+     * @return
+     */
     @RequestMapping(value = "/book/{bookId}", method = RequestMethod.GET)
     public ResponseEntity<ResultBean> getBookById(@PathVariable Integer bookId) {
         LOGGER.info("----------getBookById START----------");
@@ -54,6 +60,12 @@ public class BookController {
         return new ResponseEntity<ResultBean>(entity, HttpStatus.OK);
     }
 
+    /**
+     * getBookByName
+     * @author: LinhDT
+     * @param bookName
+     * @return
+     */
     @RequestMapping(value = "/getbookbyname", method = RequestMethod.GET)
     public ResponseEntity<ResultBean> getBookByName(@RequestBody String bookName) {
         LOGGER.info("----------getBookByName START----------");
@@ -70,6 +82,12 @@ public class BookController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
+    /**
+     * getBookByAuthor
+     * @author: LinhDT
+     * @param author
+     * @return
+     */
     @RequestMapping(value = "/getbookbyauthor", method = RequestMethod.GET)
     public ResponseEntity<ResultBean> getBookByAuthor(@RequestBody String author) {
         LOGGER.info("----------getBookByAuthor START----------");
@@ -86,6 +104,12 @@ public class BookController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
+    /**
+     * getBookByCategory
+     * @author: LinhDT
+     * @param category
+     * @return
+     */
     @RequestMapping(value = "/getbookbycategory", method = RequestMethod.GET)
     public ResponseEntity<ResultBean> getBookByCategory(@RequestBody String category) {
         LOGGER.info("----------getBookByCategory START----------");
@@ -102,6 +126,12 @@ public class BookController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
+    /**
+     * getBookByPublicationDate
+     * @author: LinhDT
+     * @param publicationDate
+     * @return
+     */
     @RequestMapping(value = "/getbookbypublicationdate", method = RequestMethod.GET)
     public ResponseEntity<ResultBean> getBookByPublicationDate(@RequestBody String publicationDate) {
         LOGGER.info("----------getBookByPublicationDate START----------");

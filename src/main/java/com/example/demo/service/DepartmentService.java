@@ -4,15 +4,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-package com.example.demo.dao;
+package com.example.demo.service;
 
-import java.util.List;
-
-import com.example.demo.bean.EBookEntity;
-import com.example.demo.response.EBookResponse;
+import com.example.demo.bean.ResultBean;
+import com.example.demo.utils.ApiValidateException;
 
 /**
- * [OVERVIEW] E-Book Data Object Access.
+ * [OVERVIEW] Department Service.
  *
  * @author: LinhDT
  * @version: 1.0
@@ -21,20 +19,13 @@ import com.example.demo.response.EBookResponse;
  * --------------------------------------------------------------------------
  * 001       1.0       2021/04/17      LinhDT             Create new
 */
-public interface EBookDao {
+public interface DepartmentService {
 
     /**
-     * downloadEBookById
-     * @author: LinhDT
-     * @param bookId
-     * @return
-     */
-    public EBookResponse downloadEBookById(Integer bookId);
-
-    /**
-     * getListEBooks
+     * getListDepartments
      * @author: LinhDT
      * @return
+     * @throws ApiValidateException
      */
-    public List<EBookEntity> getListEBooks();
+    public ResultBean getListDepartments() throws ApiValidateException;
 }

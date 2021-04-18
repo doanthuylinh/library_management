@@ -74,6 +74,6 @@ public class EBookServiceImpl implements EBookService {
             return new ResultBean("ERR14", MessageUtils.getMessage("ERR14"));
         }
         LOGGER.info("----------getListEBooks END----------");
-        return new ResultBean(listEntity, "200", MessageUtils.getMessage("MSG05", new Object[] { "list os E-Books" }));
+        return new ResultBean(listEntity, "200", MessageUtils.getMessage("MSG01", new Object[] { "list of E-Books" }));
     }
 }
