@@ -13,7 +13,6 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.ResolvableType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,7 @@ import com.example.demo.service.AppAuthorizer;
 /**
  * [OVERVIEW] AppAuthorizerImpl.
  *
- * @author: (VNEXT)LinhDT
+ * @author: LinhDT
  * @version: 1.0
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]

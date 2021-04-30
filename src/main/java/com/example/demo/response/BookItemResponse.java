@@ -1,10 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
 package com.example.demo.response;
+
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,10 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/15      LinhDT       	  Create new
+ * 001       1.0       2021/04/15      LinhDT             Create new
+ * 002       1.1       2021/04/21      LinhDT             Update Json Properties
 */
 public class BookItemResponse extends BookResponse {
 
+    @JsonProperty("book_item_id")
+    private Integer bookItemId;
     @JsonProperty("barcode")
     private String barcode;
     @JsonProperty("date_of_purchase")
@@ -28,10 +33,16 @@ public class BookItemResponse extends BookResponse {
     private String dateAddedToLibrary;
     @JsonProperty("location")
     private String location;
-    @JsonProperty("price")
-    private Double price;
-    @JsonProperty("book_status_name")
-    private String bookStatusName;
+    @JsonProperty("state")
+    private Integer state;
+
+    public Integer getBookItemId() {
+        return bookItemId;
+    }
+
+    public void setBookItemId(Integer bookItemId) {
+        this.bookItemId = bookItemId;
+    }
 
     public String getBarcode() {
         return barcode;
@@ -65,45 +76,34 @@ public class BookItemResponse extends BookResponse {
         this.location = location;
     }
 
-    public Double getPrice() {
-        return price;
+    public Integer getState() {
+        return state;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setState(Integer state) {
+        this.state = state;
     }
 
-    public String getBookStatusName() {
-        return bookStatusName;
-    }
-
-    public void setBookStatusName(String bookStatusName) {
-        this.bookStatusName = bookStatusName;
-    }
-
-    public BookItemResponse(Integer bookId, String bookName, String description, String language, String bookAuthor, String categoryName, String departmentName,
-            Integer quantity, String bookTypeName, String publicationDate, String barcode, String dateOfPurchase, String dateAddedToLibrary, String location,
-            Double price, String bookStatusName) {
-        super(bookId, bookName, description, language, bookAuthor, categoryName, departmentName, quantity, bookTypeName, publicationDate);
+    public BookItemResponse(Integer bookId, String bookName, String description, String language, String author, String categoryName, String departmentName,
+            String publicationDate, String thumbnail, Double price, Integer bookItemId, String barcode, String dateOfPurchase, String dateAddedToLibrary,
+            String location, Double rentCost, Date createDate, Integer state) {
+        super(bookId, bookName, description, language, author, categoryName, departmentName, publicationDate, thumbnail, rentCost, price, createDate);
+        this.bookItemId = bookItemId;
         this.barcode = barcode;
         this.dateOfPurchase = dateOfPurchase;
         this.dateAddedToLibrary = dateAddedToLibrary;
         this.location = location;
-        this.price = price;
-        this.bookStatusName = bookStatusName;
+        this.state = state;
     }
 
-    public BookItemResponse(Integer bookId, String bookName, String description, String language, String bookAuthor, String categoryName, String departmentName,
-            Integer quantity, String bookTypeName, String publicationDate) {
-        super(bookId, bookName, description, language, bookAuthor, categoryName, departmentName, quantity, bookTypeName, publicationDate);
+    public BookItemResponse() {
+        super();
     }
 
-    @Override
-    public String toString() {
-        return "BookItemResponse [barcode=" + barcode + ", dateOfPurchase=" + dateOfPurchase + ", dateAddedToLibrary=" + dateAddedToLibrary + ", location="
-                + location + ", price=" + price + ", bookStatusName=" + bookStatusName + ", bookId=" + bookId + ", bookName=" + bookName + ", description="
-                + description + ", language=" + language + ", bookAuthor=" + bookAuthor + ", categoryName=" + categoryName + ", departmentName="
-                + departmentName + ", quantity=" + quantity + ", bookTypeName=" + bookTypeName + ", publicationDate=" + publicationDate + "]";
+    public BookItemResponse(Integer bookId, String bookName, String description, String language, String author, String categoryName, String departmentName,
+            String publicationDate, String thumbnail, Double rentCost, Date createDate, Double price) {
+        super(bookId, bookName, description, language, author, categoryName, departmentName, publicationDate, thumbnail, rentCost, price, createDate);
+
     }
 
 }

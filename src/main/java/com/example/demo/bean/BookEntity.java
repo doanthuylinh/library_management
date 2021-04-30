@@ -1,21 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
 package com.example.demo.bean;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * [OVERVIEW] Book Entity.
@@ -26,9 +32,10 @@ import javax.persistence.Table;
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
  * 001       1.0       2021/04/09      LinhDT       	  Create new
+ * 002       1.1       2021/04/21      LinhDT             Update DB 
 */
 @Entity
-@Table(name = "book")
+@Table(name = "Book")
 public class BookEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,34 +43,76 @@ public class BookEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
+    @SerializedName("book_id")
+    @JsonProperty("book_id")
     private Integer bookId;
 
     @Column(name = "book_name")
+    @SerializedName("book_name")
+    @JsonProperty("book_name")
     private String bookName;
 
     @Column(name = "description")
+    @SerializedName("description")
+    @JsonProperty("description")
     private String description;
 
     @Column(name = "language")
+    @SerializedName("language")
+    @JsonProperty("language")
     private String language;
 
-    @Column(name = "book_author")
-    private String bookAuthor;
+    @Column(name = "author")
+    @SerializedName("author")
+    @JsonProperty("author")
+    private String author;
 
-    @Column(name = "category")
-    private Integer category;
+    @Column(name = "category_id")
+    @SerializedName("category_id")
+    @JsonProperty("category_id")
+    private Integer categoryId;
 
-    @Column(name = "department")
-    private Integer department;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    @Column(name = "book_type")
-    private Character bookType;
+    @Column(name = "department_id")
+    @SerializedName("department_id")
+    @JsonProperty("department_id")
+    private Integer departmentId;
 
     @Column(name = "publication_date")
+    @SerializedName("publication_date")
+    @JsonProperty("publication_date")
     private String publicationDate;
+
+    @Column(name = "thumbnail")
+    @SerializedName("thumbnail")
+    @JsonProperty("thumbnail")
+    private String thumbnail;
+
+    @Column(name = "rent_cost", columnDefinition = "double default 0")
+    @SerializedName("rent_cost")
+    @JsonProperty("rent_cost")
+    private Double rentCost;
+
+    @Column(name = "price", columnDefinition = "double default 0")
+    @SerializedName("price")
+    @JsonProperty("price")
+    private Double price;
+
+    @Column(name = "create_date")
+    @SerializedName("create_date")
+    @JsonProperty("create_date")
+    private Date createDate;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    @JsonProperty("category_entity")
+    @JsonInclude(Include.NON_NULL)
+    private CategoryEntity categoryEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", insertable = false, updatable = false)
+    @JsonProperty("department_entity")
+    @JsonInclude(Include.NON_NULL)
+    private DepartmentEntity departmentEntity;
 
     public Integer getBookId() {
         return bookId;
@@ -97,44 +146,36 @@ public class BookEntity implements Serializable {
         this.language = language;
     }
 
-    public String getBookAuthor() {
-        return bookAuthor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setBookAuthor(String bookAuthor) {
-        this.bookAuthor = bookAuthor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public Integer getDepartment() {
-        return department;
+    public Double getRentCost() {
+        return rentCost;
     }
 
-    public void setDepartment(Integer department) {
-        this.department = department;
+    public void setRentCost(Double rentCost) {
+        this.rentCost = rentCost;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Character getBookType() {
-        return bookType;
-    }
-
-    public void setBookType(Character bookType) {
-        this.bookType = bookType;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getPublicationDate() {
@@ -143,6 +184,63 @@ public class BookEntity implements Serializable {
 
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date datetime) {
+        this.createDate = datetime;
+    }
+
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
+
+    public DepartmentEntity getDepartmentEntity() {
+        return departmentEntity;
+    }
+
+    public void setDepartmentEntity(DepartmentEntity departmentEntity) {
+        this.departmentEntity = departmentEntity;
+    }
+
+    public BookEntity(Integer bookId, String bookName, String description, String language, String author, Integer categoryId, Integer departmentId,
+            String publicationDate, String thumbnail, Double rentCost, Double price, Date createDate) {
+        super();
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.description = description;
+        this.language = language;
+        this.author = author;
+        this.categoryId = categoryId;
+        this.departmentId = departmentId;
+        this.publicationDate = publicationDate;
+        this.thumbnail = thumbnail;
+        this.rentCost = rentCost;
+        this.price = price;
+        this.createDate = createDate;
     }
 
     public BookEntity() {

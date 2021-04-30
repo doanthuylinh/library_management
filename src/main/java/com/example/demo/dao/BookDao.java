@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,9 +20,17 @@ import com.example.demo.response.BookResponse;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/15      LinhDT       	  Create new
+ * 001       1.0       2021/04/15      LinhDT             Create new
 */
 public interface BookDao {
+
+    /**
+     * getBookEntityById
+     * @author: LinhDT
+     * @param bookId
+     * @return
+     */
+    public BookEntity getBookEntityById(Integer bookId);
 
     /**
      * getBookById
@@ -43,10 +51,10 @@ public interface BookDao {
     /**
      * getBookByAuthor
      * @author: LinhDT
-     * @param bookAythor
+     * @param author
      * @return
      */
-    public List<BookEntity> getBookByAuthor(String bookAuthor);
+    public List<BookEntity> getBooksByAuthor(String author);
 
     /**
      * getBookByCategory
@@ -54,7 +62,7 @@ public interface BookDao {
      * @param category
      * @return
      */
-    public List<BookEntity> getBookByCategory(String category);
+    public List<BookEntity> getBooksByCategory(String category);
 
     /**
      * getCategoryByName
@@ -71,5 +79,31 @@ public interface BookDao {
      * @return
      */
     public List<BookEntity> getBookByPublicationDate(String publicationDate);
+
+    /**
+     * searchBook
+     * @author: LinhDT
+     * @param query
+     * @return
+     */
+    public List<BookEntity> searchBook(String query);
+
+    public List<BookEntity> searchBook(String query, Integer from, Integer limit);
+
+    /**
+     * updateBook
+     * @author: LinhDT
+     * @param entity
+     * @return
+     */
+    public BookEntity updateBook(BookEntity entity);
+
+    /**
+     * addBook
+     * @author: LinhDT
+     * @param entity
+     * @return
+     */
+    public BookEntity addBook(BookEntity entity);
 
 }

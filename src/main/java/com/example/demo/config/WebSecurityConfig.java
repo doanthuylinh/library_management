@@ -32,7 +32,7 @@ import com.example.demo.service.impl.UserDetailsServiceImpl;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/09      LinhDT       	  Create new
+ * 001       1.0       2021/04/09      LinhDT             Create new
 */
 @Configuration
 @EnableWebSecurity
@@ -63,11 +63,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable() // Prevent request from another domain.
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/registration", "/api/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/book/{bookId}", "/api/getbookbyname", "/api/getbookbyauthor", "/api/getbookbycategory",
-                        "/api/getbookbypublicationdate", "/api/getbookitembybarcode", "/api/getlistbookitembybookid", "/api/ebook/{bookId}", "/api/ebook-list",
-                        "/api/categories-list", "/api/departments-list")
-                .permitAll().anyRequest().authenticated();
+                .authorizeRequests()
+                // User
+                .antMatchers(HttpMethod.POST, "/api/user/registration", "/api/login").permitAll()
+                // Book
+                .antMatchers("/api/book/{bookId}", "/api/getbookbyname", "/api/getbooksbyauthor", "/api/getbooksbycategory",
+                        "/api/getbookbypublicationdate", "/api/book").permitAll()
+                // Book item
+                .antMatchers("/api/getlistbookitembybookid/{bookId}",
+                		"/api/bookitem/count", "/api/bookitem").permitAll()
+                // Reservation
+                .antMatchers("/api/reservation", "/api/reservation/item", "/api/reservation/borrow",
+                		"/api/reservation/issue", "/api/reservation/return", "/api/reservation/cancel").permitAll()
+                // Category
+                .antMatchers("/api/categories-list", "/api/category").permitAll()
+                // Department
+                .antMatchers("/api/departments-list", "/api/department").permitAll()
+                // Heath check
+                .antMatchers(HttpMethod.GET, "/api", "/api/ping").permitAll()
+                .anyRequest().authenticated();
         // Except for the API(s) above, all other requests must be verified before access.
         // Add another class of Filter to check JSON Web Tokens.
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

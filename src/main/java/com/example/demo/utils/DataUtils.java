@@ -10,6 +10,8 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.example.demo.exception.ApiValidateException;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
@@ -108,5 +110,38 @@ public class DataUtils {
             throw new ApiValidateException("ERR", "JSON " + member + " is invalid.");
         }
         return null;
+    }
+
+    public static JsonObject getAsObjectByJson(JsonObject object, String member) throws ApiValidateException {
+        try {
+            if (object.has(member)) {
+                return object.get(member).getAsJsonObject();
+            }
+        } catch (Exception e) {
+            throw new ApiValidateException("ERR", "JSON " + member + " is invalid.");
+        }
+        return null;
+    }
+
+    public static boolean isNullOrEmpty(String data) {
+        if (data == null || data.trim().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isNullOrEmpty(Integer data) throws ApiValidateException {
+        if (data == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static <T> T getEntityByJsonString(String data, Class<T> typeoff) throws ApiValidateException {
+        ValidateUtils.validateDataBody(data);
+
+        T entity = new Gson().fromJson(data, typeoff);
+
+        return entity;
     }
 }

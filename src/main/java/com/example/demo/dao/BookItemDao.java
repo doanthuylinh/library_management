@@ -8,6 +8,8 @@ package com.example.demo.dao;
 
 import java.util.List;
 
+import com.example.demo.bean.BookItemEntity;
+import com.example.demo.data.BookItemStatus;
 import com.example.demo.response.BookItemResponse;
 
 /**
@@ -23,18 +25,34 @@ import com.example.demo.response.BookItemResponse;
 public interface BookItemDao {
 
     /**
-     * getBookItemByBarcode
-     * @author: LinhDT
-     * @param barcode
-     * @return
-     */
-    public BookItemResponse getBookItemByBarcode(String barcode);
-
-    /**
     * getListBookItemByBookId
     * @author: LinhDT
     * @param bookId
     * @return
     */
-    public List<BookItemResponse> getListBookItemByBookId(Integer bookId);
+    public List<BookItemEntity> getListBookItemByBookId(Integer bookId);
+
+    /**
+     * countBookItem
+     * @author: LinhDT
+     * @param bookId
+     * @return
+     */
+    public long countBookItem(Integer bookId);
+    
+    public BookItemEntity getBookItem(Integer bookItemId);
+
+    /**
+     * updateBookItem
+     * @author: LinhDT
+     * @param entity
+     * @return
+     */
+    public BookItemEntity updateBookItem(BookItemEntity entity);
+    
+    public BookItemEntity addBookItem(BookItemEntity entity);
+
+	List<BookItemEntity> getListBookItemWithStatusByBookId(Integer bookId, Integer statusValue);
+
+	List<BookItemEntity> getListBookItemWithStatusByBookId(Integer bookId, BookItemStatus status);
 }

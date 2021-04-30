@@ -7,7 +7,7 @@
 package com.example.demo.service;
 
 import com.example.demo.bean.ResultBean;
-import com.example.demo.utils.ApiValidateException;
+import com.example.demo.exception.ApiValidateException;
 
 /**
  * [OVERVIEW] Book Item Service.
@@ -22,20 +22,26 @@ import com.example.demo.utils.ApiValidateException;
 public interface BookItemService {
 
     /**
-     * getBookItemByBarcode
-     * @author: LinhDT
-     * @param barcode
-     * @return
-     * @throws ApiValidateException
-     */
-    public ResultBean getBookItemByBarcode(String barcode) throws ApiValidateException;
-
-    /**
      * getListBookItemByBookId
      * @author: LinhDT
      * @param bookId
      * @return
      * @throws ApiValidateException
      */
-    public ResultBean getListBookItemByBookId(String bookId) throws ApiValidateException;
+    public ResultBean getListBookItemByBookId(Integer bookId) throws ApiValidateException;
+    
+    /**
+     * countBookItem
+     * @author: LinhDT
+     * @param bookId
+     * @return
+     * @throws ApiValidateException
+     */
+    public ResultBean countBookItem(Integer bookId) throws ApiValidateException;
+    
+    public ResultBean getBookItem(Integer bookItemId) throws ApiValidateException;
+    
+    public ResultBean addBookItem(String data) throws ApiValidateException;
+    
+    public ResultBean updateBookItem(String data) throws ApiValidateException;
 }

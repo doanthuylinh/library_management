@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * [OVERVIEW] Department Entity.
  *
@@ -26,7 +28,7 @@ import javax.persistence.Table;
  * 001       1.0       2021/04/09      LinhDT       	  Create new
 */
 @Entity
-@Table(name = "department")
+@Table(name = "Department")
 public class DepartmentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,9 +36,11 @@ public class DepartmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
+    @JsonProperty("department_id")
     private Integer departmentId;
 
     @Column(name = "department_name")
+    @JsonProperty("department_name")
     private String departmentName;
 
     public Integer getDepartmentId() {

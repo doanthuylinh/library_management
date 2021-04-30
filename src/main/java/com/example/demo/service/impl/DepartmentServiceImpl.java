@@ -18,15 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.bean.DepartmentEntity;
 import com.example.demo.bean.ResultBean;
 import com.example.demo.dao.DepartmentDao;
+import com.example.demo.exception.ApiValidateException;
 import com.example.demo.service.DepartmentService;
-import com.example.demo.utils.ApiValidateException;
+import com.example.demo.utils.ConstantColumn;
+import com.example.demo.utils.DataUtils;
 import com.example.demo.utils.MessageUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 /**
  * [OVERVIEW] Department Service Implementation.
  *
  * @author: LinhDT
- * @version: 1.0
+ * @version: 1.1
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
@@ -56,6 +60,41 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         LOGGER.info("----------getListDepartments END----------");
         return new ResultBean(listEntity, "200", MessageUtils.getMessage("MSG01", new Object[] { "list of departments" }));
+    }
+
+    /**
+     * addDepartment
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
+    @Override
+    public ResultBean addDepartment(String data) throws ApiValidateException {
+        LOGGER.info("----------addDepartment START----------");
+        if (DataUtils.isNullOrEmpty(data)) {
+            throw new ApiValidateException("ERR04", MessageUtils.getMessage("ERR04", "Data is not null"));
+        }
+        JsonObject json = new Gson().fromJson(data, JsonObject.class);
+
+        String departmentName = DataUtils.getAsStringByJson(json, ConstantColumn.DEPARTMENT_NAME);
+
+        if (DataUtils.isNullOrEmpty(departmentName)) {
+            throw new ApiValidateException("ERR04", MessageUtils.getMessage("ERR04", new Object[] { "Department name" }));
+        }
+
+        // Check if department exists in DB, if yes throw a message.
+        DepartmentEntity departmentEntity = departmentDao.getDepartmentByDepartmentName(departmentName);
+        if (!Objects.isNull(departmentEntity)) {
+            throw new ApiValidateException("ERR03", MessageUtils.getMessage("ERR03", new Object[] { "Department name" }));
+        }
+
+        DepartmentEntity department = new DepartmentEntity();
+        department.setDepartmentName(departmentName);
+
+        departmentDao.addDepartment(department);
+        LOGGER.info("----------addDepartment END----------");
+        return new ResultBean(department, "200", MessageUtils.getMessage("MSG02", ConstantColumn.DEPARTMENT));
     }
 
 }

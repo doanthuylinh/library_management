@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * [OVERVIEW] Category Entity.
  *
@@ -26,7 +28,7 @@ import javax.persistence.Table;
  * 001       1.0       2021/04/09      LinhDT       	  Create new
 */
 @Entity
-@Table(name = "category")
+@Table(name = "Category")
 public class CategoryEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,9 +36,11 @@ public class CategoryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
+    @JsonProperty("category_id")
     private Integer categoryId;
 
     @Column(name = "category_name")
+    @JsonProperty("category_name")
     private String categoryName;
 
     public Integer getCategoryId() {

@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
 package com.example.demo.service;
 
 import com.example.demo.bean.ResultBean;
-import com.example.demo.utils.ApiValidateException;
+import com.example.demo.exception.ApiValidateException;
 
 /**
  * [OVERVIEW] Book Service.
@@ -38,22 +38,22 @@ public interface BookService {
     public ResultBean getBookByName(String bookName) throws ApiValidateException;
 
     /**
-     * getBookByAuthor
+     * getBooksByAuthor
      * @author: LinhDT
      * @param author
      * @return
      * @throws ApiValidateException
      */
-    public ResultBean getBookByAuthor(String author) throws ApiValidateException;
+    public ResultBean getBooksByAuthor(String author) throws ApiValidateException;
 
     /**
-     * getBookByCategory
+     * getBooksByCategory
      * @author: LinhDT
      * @param category
      * @return
      * @throws ApiValidateException
      */
-    public ResultBean getBookByCategory(String category) throws ApiValidateException;
+    public ResultBean getBooksByCategory(String category) throws ApiValidateException;
 
     /**
     * getBookByPublicationDate
@@ -63,4 +63,31 @@ public interface BookService {
     * @throws ApiValidateException
     */
     public ResultBean getBookByPublicationDate(String publicationDate) throws ApiValidateException;
+    
+    /**
+     * searchBook
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
+    public ResultBean searchBook(String data, Integer from, Integer limit) throws ApiValidateException;
+    
+    /**
+     * addBook
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
+    public ResultBean addBook(String data) throws ApiValidateException;
+    
+    /**
+     * updateBook
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
+    public ResultBean updateBook(String data) throws ApiValidateException;
 }
