@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.bean.ResultBean;
+import com.example.demo.data.UserRole;
 import com.example.demo.exception.ApiValidateException;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.MessageUtils;
@@ -33,8 +34,8 @@ import com.example.demo.utils.MessageUtils;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/09      LinhDT       	  Create new (Registration, login)
- * 002       1.0       2021/04/11      LinhDT       	  View profile, change password, update profile      	  		
+ * 001       1.0       2021/04/09      LinhDT             Create new (Registration, login)
+ * 002       1.1       2021/04/11      LinhDT             View profile, change password, update profile
 */
 @RestController
 @RequestMapping(value = "/api")
@@ -47,7 +48,6 @@ public class UserController {
 
     /**
      * addUser (registration)
-     * 
      * @author: LinhDT
      * @param entity
      * @return
@@ -57,12 +57,34 @@ public class UserController {
         LOGGER.info("----------addUser START----------");
         ResultBean resultBean = null;
         try {
-            resultBean = userService.addUser(entity);
+            resultBean = userService.addUser(entity, UserRole.MEMBER);
         } catch (ApiValidateException e) {
-            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        LOGGER.info("----------addUser END----------");
+        return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
+    }
+    
+    /**
+     * addUserAdmin
+     * @author: LinhDT
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/user/registration/admin", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> addUserAdmin(@RequestBody String entity) {
+        LOGGER.info("----------addUser START----------");
+        ResultBean resultBean = null;
+        try {
+            resultBean = userService.addUser(entity, UserRole.ADMIN);
+        } catch (ApiValidateException e) {
+            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         LOGGER.info("----------addUser END----------");
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
@@ -70,7 +92,6 @@ public class UserController {
 
     /**
      * updateUser
-     * 
      * @author: LinhDT
      * @param entity
      * @return
@@ -81,10 +102,10 @@ public class UserController {
         try {
             userService.updateUser(entity);
         } catch (ApiValidateException e) {
-            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         LOGGER.info("----------updateUser END----------");
@@ -92,8 +113,7 @@ public class UserController {
     }
 
     /**
-     * login
-     * 
+     * login 
      * @author: LinhDT
      * @param entity
      * @return
@@ -105,10 +125,10 @@ public class UserController {
         try {
             result = userService.login(entity);
         } catch (ApiValidateException e) {
-            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         LOGGER.info("----------login END----------");
         return new ResponseEntity<ResultBean>(new ResultBean(result, "200", MessageUtils.getMessage("MSG03")), HttpStatus.OK);
@@ -116,7 +136,6 @@ public class UserController {
 
     /**
      * changePassword
-     * 
      * @author: LinhDT
      * @param entity
      * @return
@@ -128,10 +147,10 @@ public class UserController {
         try {
             userService.changePassword(entity);
         } catch (ApiValidateException e) {
-            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean(e.getCode(), e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(new ResultBean("500", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         LOGGER.info("----------changePassword END----------");
@@ -140,7 +159,6 @@ public class UserController {
 
     /**
      * viewProfile
-     * 
      * @author: LinhDT
      * @return
      */
@@ -153,7 +171,7 @@ public class UserController {
             entity = userService.viewProfile();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<ResultBean>(entity, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResultBean>(entity, HttpStatus.OK);
         }
         LOGGER.info("----------viewProfile END----------");
         return new ResponseEntity<ResultBean>(entity, HttpStatus.OK);

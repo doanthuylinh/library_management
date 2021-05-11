@@ -17,7 +17,7 @@ import com.example.demo.exception.ApiValidateException;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/15      LinhDT       	  Create new
+ * 001       1.0       2021/04/15      LinhDT             Create new
 */
 public interface BookItemService {
 
@@ -39,9 +39,30 @@ public interface BookItemService {
      */
     public ResultBean countBookItem(Integer bookId) throws ApiValidateException;
     
+    /**
+     * getBookItem
+     * @author: LinhDT
+     * @param bookItemId
+     * @return
+     * @throws ApiValidateException
+     */
     public ResultBean getBookItem(Integer bookItemId) throws ApiValidateException;
     
+    /**
+     * addBookItem
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
     public ResultBean addBookItem(String data) throws ApiValidateException;
     
+    /**
+     * updateBookItem
+     * @author: LinhDT
+     * @param data
+     * @return
+     * @throws ApiValidateException
+     */
     public ResultBean updateBookItem(String data) throws ApiValidateException;
 }

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// � 2021 IDTU-CS3332IRFA-21TSP
+// © 2021 IDTU-CS3332IRFA-21TSP
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,6 +9,7 @@ package com.example.demo.service;
 import java.util.Map;
 
 import com.example.demo.bean.ResultBean;
+import com.example.demo.data.UserRole;
 import com.example.demo.exception.ApiValidateException;
 
 /**
@@ -19,18 +20,19 @@ import com.example.demo.exception.ApiValidateException;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/09      LinhDT       	  Create new
+ * 001       1.0       2021/04/09      LinhDT             Create new
 */
 public interface UserService {
 
     /**
-     * addUser (Registration)
+     * addUser
      * @author: LinhDT
-     * @param entity
+     * @param data
+     * @param role
      * @return
      * @throws ApiValidateException
      */
-    public ResultBean addUser(String entity) throws ApiValidateException;
+    public ResultBean addUser(String data, UserRole role) throws ApiValidateException;
 
     /**
      * updateUser
@@ -63,4 +65,5 @@ public interface UserService {
      * @throws ApiValidateException
      */
     public void changePassword(String json) throws ApiValidateException;
+
 }
