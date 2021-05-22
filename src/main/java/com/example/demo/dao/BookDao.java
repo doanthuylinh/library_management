@@ -84,14 +84,6 @@ public interface BookDao {
      * searchBook
      * @author: LinhDT
      * @param query
-     * @return
-     */
-    public List<BookEntity> searchBook(String query);
-
-    /**
-     * searchBook
-     * @author: LinhDT
-     * @param query
      * @param from
      * @param limit
      * @return
@@ -113,5 +105,7 @@ public interface BookDao {
      * @return
      */
     public BookEntity addBook(BookEntity entity);
+    
+    public void removeBook(Integer bookId);
 
 }

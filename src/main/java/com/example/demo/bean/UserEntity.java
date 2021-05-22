@@ -7,6 +7,9 @@
 package com.example.demo.bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,8 +20,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.example.demo.data.UserRole;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -41,36 +46,36 @@ public class UserEntity implements Serializable {
     @Column(name = "user_id")
     @SerializedName("user_id")
     @JsonProperty("user_id")
-    protected Integer userId;
+    private Integer userId;
     
     @JsonProperty("username")
     @Column(name = "username")
-    protected String username;
+    private String username;
     
     @JsonProperty("password")
     @Column(name = "password")
     @JsonIgnore
-    protected String password;
+    private String password;
 
     @JsonProperty("email")
     @Column(name = "email")
-    protected String email;
+    private String email;
 
     @JsonProperty("phone")
     @Column(name = "phone")
-    protected String phone;
+    private String phone;
 
     @JsonProperty("dob")
     @Column(name = "dob")
-    protected Date dob;
+    private Date dob;
 
     @JsonProperty("address")
     @Column(name = "address")
-    protected String address;
+    private String address;
 
     @JsonProperty("role")
     @Column(name = "role")
-    protected Integer role;
+    private Integer role;
 
     public Integer getUserId() {
         return userId;
@@ -88,6 +93,7 @@ public class UserEntity implements Serializable {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -115,6 +121,13 @@ public class UserEntity implements Serializable {
     public Date getDob() {
         return dob;
     }
+    
+    @JsonGetter("dob")
+    public String getDobValue() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(dob);
+        return dateValue;
+    }
 
     public void setDob(Date dob) {
         this.dob = dob;
@@ -130,6 +143,11 @@ public class UserEntity implements Serializable {
 
     public UserRole getRole() {
         return UserRole.parse(this.role);
+    }
+    
+    @JsonGetter("role")
+    public Integer getRoleValue() {
+    	return this.role;
     }
     
     public void setRole(UserRole role) {
@@ -155,5 +173,6 @@ public class UserEntity implements Serializable {
         this.address = address;
         this.role = role;
     }
+    
 
 }
