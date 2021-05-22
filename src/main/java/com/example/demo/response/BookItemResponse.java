@@ -6,8 +6,11 @@
 
 package com.example.demo.response;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -55,6 +58,13 @@ public class BookItemResponse extends BookResponse {
     public Date getDateOfPurchase() {
         return dateOfPurchase;
     }
+    
+    @JsonGetter("date_of_purchase")
+    public String getDateOfPurchaseValue() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(dateOfPurchase);
+        return dateValue;
+    }
 
     public void setDateOfPurchase(Date dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
@@ -62,6 +72,13 @@ public class BookItemResponse extends BookResponse {
 
     public Date getDateAddedToLibrary() {
         return dateAddedToLibrary;
+    }
+    
+    @JsonGetter("date_added_to_library")
+    public String getDateAddedToLibraryValue() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(dateAddedToLibrary);
+        return dateValue;
     }
 
     public void setDateAddedToLibrary(Date dateAddedToLibrary) {
