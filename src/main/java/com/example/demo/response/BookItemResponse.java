@@ -28,9 +28,9 @@ public class BookItemResponse extends BookResponse {
     @JsonProperty("barcode")
     private String barcode;
     @JsonProperty("date_of_purchase")
-    private String dateOfPurchase;
+    private Date dateOfPurchase;
     @JsonProperty("date_added_to_library")
-    private String dateAddedToLibrary;
+    private Date dateAddedToLibrary;
     @JsonProperty("location")
     private String location;
     @JsonProperty("state")
@@ -52,19 +52,19 @@ public class BookItemResponse extends BookResponse {
         this.barcode = barcode;
     }
 
-    public String getDateOfPurchase() {
+    public Date getDateOfPurchase() {
         return dateOfPurchase;
     }
 
-    public void setDateOfPurchase(String dateOfPurchase) {
+    public void setDateOfPurchase(Date dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
     }
 
-    public String getDateAddedToLibrary() {
+    public Date getDateAddedToLibrary() {
         return dateAddedToLibrary;
     }
 
-    public void setDateAddedToLibrary(String dateAddedToLibrary) {
+    public void setDateAddedToLibrary(Date dateAddedToLibrary) {
         this.dateAddedToLibrary = dateAddedToLibrary;
     }
 
@@ -85,7 +85,7 @@ public class BookItemResponse extends BookResponse {
     }
 
     public BookItemResponse(Integer bookId, String bookName, String description, String language, String author, String categoryName, String departmentName,
-            String publicationDate, String thumbnail, Double price, Integer bookItemId, String barcode, String dateOfPurchase, String dateAddedToLibrary,
+            Date publicationDate, String thumbnail, Double price, Integer bookItemId, String barcode, Date dateOfPurchase, Date dateAddedToLibrary,
             String location, Double rentCost, Date createDate, Integer state) {
         super(bookId, bookName, description, language, author, categoryName, departmentName, publicationDate, thumbnail, rentCost, price, createDate);
         this.bookItemId = bookItemId;
@@ -101,7 +101,7 @@ public class BookItemResponse extends BookResponse {
     }
 
     public BookItemResponse(Integer bookId, String bookName, String description, String language, String author, String categoryName, String departmentName,
-            String publicationDate, String thumbnail, Double rentCost, Date createDate, Double price) {
+            Date publicationDate, String thumbnail, Double rentCost, Date createDate, Double price) {
         super(bookId, bookName, description, language, author, categoryName, departmentName, publicationDate, thumbnail, rentCost, price, createDate);
 
     }

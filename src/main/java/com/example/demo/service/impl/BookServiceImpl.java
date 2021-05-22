@@ -45,7 +45,7 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookDao bookDao;
-    
+
     @Autowired
     private BookItemDao bookItemDao;
 
@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResultBean getBookById(Integer bookId) {
         LOGGER.info("----------getBookById START----------");
-        BookResponse entity = bookDao.getBookById(bookId);
+        BookEntity entity = bookDao.getBookEntityById(bookId);
         if (Objects.isNull(entity)) {
             return new ResultBean("ERR14", MessageUtils.getMessage("ERR14"));
         }
@@ -226,17 +226,17 @@ public class BookServiceImpl implements BookService {
         return new ResultBean(bookDao.addBook(book), "201", MessageUtils.getMessage("MSG02", "book"));
     }
 
-	@Override
-	public ResultBean removeBook(String data) throws ApiValidateException {
-		Integer bookId = DataUtils.getAsIntegerByJsonString(data, "book_id");
-		long countBookItem = bookItemDao.countBookItem(bookId);
-		if (countBookItem > 0) {
-			throw new ApiValidateException("ERR04", "Book have bookitems");
-		}
-		
-		bookDao.removeBook(bookId);
-		
-		return new ResultBean("200",  MessageUtils.getMessage("MSG04", "book"));
-	}
+    @Override
+    public ResultBean removeBook(String data) throws ApiValidateException {
+        Integer bookId = DataUtils.getAsIntegerByJsonString(data, "book_id");
+        long countBookItem = bookItemDao.countBookItem(bookId);
+        if (countBookItem > 0) {
+            throw new ApiValidateException("ERR04", "Book have bookitems");
+        }
+
+        bookDao.removeBook(bookId);
+
+        return new ResultBean("200", MessageUtils.getMessage("MSG04", "book"));
+    }
 
 }

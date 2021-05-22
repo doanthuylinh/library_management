@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/15      LinhDT       	  Create new
+ * 001       1.0       2021/04/15      LinhDT             Create new
 */
 public class UserResponse {
 

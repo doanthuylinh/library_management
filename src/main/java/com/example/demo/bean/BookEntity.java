@@ -7,6 +7,8 @@
 package com.example.demo.bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -80,7 +83,7 @@ public class BookEntity implements Serializable {
     @Column(name = "publication_date")
     @SerializedName("publication_date")
     @JsonProperty("publication_date")
-    private String publicationDate;
+    private Date publicationDate;
 
     @Column(name = "thumbnail")
     @SerializedName("thumbnail")
@@ -178,11 +181,18 @@ public class BookEntity implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public String getPublicationDate() {
+    public Date getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(String publicationDate) {
+    @JsonGetter("publication_date")
+    public String getPublicationDateValue() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(publicationDate);
+        return dateValue;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
     }
 
@@ -227,7 +237,7 @@ public class BookEntity implements Serializable {
     }
 
     public BookEntity(Integer bookId, String bookName, String description, String language, String author, Integer categoryId, Integer departmentId,
-            String publicationDate, String thumbnail, Double rentCost, Double price, Date createDate) {
+            Date publicationDate, String thumbnail, Double rentCost, Double price, Date createDate) {
         super();
         this.bookId = bookId;
         this.bookName = bookName;
