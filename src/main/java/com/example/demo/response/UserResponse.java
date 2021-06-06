@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/15      LinhDT             Create new
+ * 001       1.0       2021/04/15      LinhDT       	  Create new
 */
 public class UserResponse {
 
@@ -99,6 +99,8 @@ public class UserResponse {
 
     @JsonGetter("dob")
     public String getDobValue() {
+    	if (dob == null) return null;
+    	
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String dateValue = df.format(dob);
         return dateValue;

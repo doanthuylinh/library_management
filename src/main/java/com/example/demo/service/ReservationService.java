@@ -77,7 +77,7 @@ public interface ReservationService {
      * @throws AccessDeniedException
      */
     @PreAuthorize("hasAuthority('MEMBER')")
-    public ResultBean borrowReservation(Integer reservationId) throws LibException, AccessDeniedException;
+    public ResultBean borrowReservation(ReservationEntity reservation) throws LibException, AccessDeniedException;
 
     /**
      * issueReservation
@@ -99,7 +99,7 @@ public interface ReservationService {
      * @throws AccessDeniedException
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResultBean returnReservation(Integer reservationId) throws LibException, AccessDeniedException;
+    public ResultBean returnReservation(ReservationEntity reservation) throws LibException, AccessDeniedException;
 
     /**
      * cancelBorrowingReservation
@@ -111,6 +111,17 @@ public interface ReservationService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MEMBER')")
     public ResultBean cancelBorrowingReservation(Integer reservationId) throws LibException, AccessDeniedException;
+    
+    /**
+     * extendReservation
+     * @author: LinhDT
+     * @param reservation
+     * @return
+     * @throws LibException
+     * @throws AccessDeniedException
+     */
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MEMBER')")
+    public ResultBean extendReservation(ReservationEntity reservation) throws LibException, AccessDeniedException;
 
     /**
      * addItemReservation
@@ -120,7 +131,7 @@ public interface ReservationService {
      * @return
      * @throws ApiValidateException
      */
-    public ResultBean addItemReservation(ReservationEntity entity, Integer bookId) throws ApiValidateException;
+    public ResultBean addItemReservation(ReservationEntity entity, Integer bookId) throws LibException;
 
     /**
      * addItemReservation

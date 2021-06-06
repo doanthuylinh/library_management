@@ -9,6 +9,7 @@ package com.example.demo.bean;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import com.example.demo.data.UserRole;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -40,16 +42,16 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    
     @Column(name = "user_id")
     @SerializedName("user_id")
     @JsonProperty("user_id")
     private Integer userId;
-
+    
     @JsonProperty("username")
     @Column(name = "username")
     private String username;
-
+    
     @JsonProperty("password")
     @Column(name = "password")
     @JsonIgnore
@@ -119,9 +121,11 @@ public class UserEntity implements Serializable {
     public Date getDob() {
         return dob;
     }
-
+    
     @JsonGetter("dob")
     public String getDobValue() {
+    	if (dob == null) return null;
+    	
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String dateValue = df.format(dob);
         return dateValue;
@@ -142,14 +146,14 @@ public class UserEntity implements Serializable {
     public UserRole getRole() {
         return UserRole.parse(this.role);
     }
-
+    
     @JsonGetter("role")
     public Integer getRoleValue() {
-        return this.role;
+    	return this.role;
     }
-
+    
     public void setRole(UserRole role) {
-        this.role = role.value();
+    	this.role = role.value();
     }
 
     public void setRole(Integer role) {
@@ -171,5 +175,6 @@ public class UserEntity implements Serializable {
         this.address = address;
         this.role = role;
     }
+    
 
 }

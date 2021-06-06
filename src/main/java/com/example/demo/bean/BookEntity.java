@@ -34,8 +34,9 @@ import com.google.gson.annotations.SerializedName;
  * @History
  * [NUMBER]  [VER]     [DATE]          [USER]             [CONTENT]
  * --------------------------------------------------------------------------
- * 001       1.0       2021/04/09      LinhDT       	  Create new
- * 002       1.1       2021/04/21      LinhDT             Update DB 
+ * 001       1.0       2021/04/09      LinhDT             Create new
+ * 002       1.1       2021/04/21      LinhDT             Update DB
+ * 003       1.2       2021/05/22      LinhDT             Update DB
 */
 @Entity
 @Table(name = "Book")
@@ -184,9 +185,11 @@ public class BookEntity implements Serializable {
     public Date getPublicationDate() {
         return publicationDate;
     }
-
+    
     @JsonGetter("publication_date")
     public String getPublicationDateValue() {
+    	if (publicationDate == null) return null;
+    	
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String dateValue = df.format(publicationDate);
         return dateValue;

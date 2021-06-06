@@ -7,6 +7,8 @@
 package com.example.demo.bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.example.demo.data.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -86,11 +89,16 @@ public class ReservationEntity implements Serializable {
     @SerializedName("status")
     @JsonProperty("status")
     private Integer status;
+    
+    @Column(name = "is_extended")
+    @SerializedName("is_extended")
+    @JsonProperty("is_extended")
+    private Boolean isExtended;
 
-    @ManyToMany
+	@ManyToMany
     @JoinColumn(name = "book_item_id")
-    @SerializedName("book_item_entities")
-    @JsonProperty("book_item_entities")
+    @SerializedName("book_items")
+    @JsonProperty("book_items")
     private List<BookItemEntity> bookItemEntities;
 
     @SerializedName("book_entities")
@@ -100,7 +108,7 @@ public class ReservationEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @JsonProperty("user_entity")
+    @JsonProperty("user")
     @JsonInclude(Include.NON_NULL)
     private UserEntity userEntity;
 
@@ -144,12 +152,30 @@ public class ReservationEntity implements Serializable {
         return reservedTime;
     }
 
+    @JsonGetter("reserved_time")
+    public String getReservedTimeValue() {
+    	if (reservedTime == null) return null;
+    	
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(reservedTime);
+        return dateValue;
+    }
+
     public void setReservedTime(Date reservedTime) {
         this.reservedTime = reservedTime;
     }
 
     public Date getExpectedReturnDate() {
         return expectedReturnDate;
+    }
+    
+    @JsonGetter("expected_return_date")
+    public String getExpectedReturnDateValue() {
+    	if (expectedReturnDate == null) return null; 
+    	
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(expectedReturnDate);
+        return dateValue;
     }
 
     public void setExpectedReturnDate(Date expectedReturnDate) {
@@ -158,6 +184,15 @@ public class ReservationEntity implements Serializable {
 
     public Date getReturnedDate() {
         return returnedDate;
+    }
+    
+    @JsonGetter("returned_date")
+    public String getReturnedDateValue() {
+    	if (returnedDate == null) return null;
+    	
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(returnedDate);
+        return dateValue;
     }
 
     public void setReturnedDate(Date returnedDate) {
@@ -172,8 +207,19 @@ public class ReservationEntity implements Serializable {
         this.totalFee = totalFee;
     }
 
-    public LocalDateTime getCreatedTime() {
-        return LocalDateTime.now();
+    public Date getCreatedTime() {
+		if (this.createdTime == null) {
+			this.createdTime = new Date();
+		}
+    	
+        return this.createdTime;
+    }
+    
+    @JsonGetter("created_time")
+    public String getCreatedTimeValue() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateValue = df.format(getCreatedTime());
+        return dateValue;
     }
 
     public void setCreatedTime(Date createdTime) {
@@ -182,6 +228,11 @@ public class ReservationEntity implements Serializable {
 
     public ReservationStatus getStatus() {
         return ReservationStatus.parse(this.status);
+    }
+    
+    @JsonGetter("status")
+    public Integer getStatusValue() {
+    	return this.status; 
     }
 
     public void setStatus(Integer status) {
@@ -192,6 +243,17 @@ public class ReservationEntity implements Serializable {
         this.status = status.value();
     }
 
+    public Boolean getIsExtended() {
+    	if (isExtended == null)
+    		return false;
+    	
+		return isExtended;
+	}
+
+	public void setIsExtended(Boolean isExtended) {
+		this.isExtended = isExtended;
+	}
+    
     public ReservationEntity(Integer reservationId, Integer userId, Date reservedTime, Date expectedReturnDate, Date returnedDate, Double totalFee,
             Date createdTime, Integer status) {
         super();

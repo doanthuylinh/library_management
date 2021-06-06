@@ -113,7 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
      * @throws ApiValidateException
      */
     @Override
-    public ResultBean addItemReservation(ReservationEntity entity, Integer bookId) throws ApiValidateException {
+    public ResultBean addItemReservation(ReservationEntity entity, Integer bookId) throws LibException {
         List<BookItemEntity> bookItems = bookItemDao.getListBookItemWithStatusByBookId(bookId, BookItemStatus.AVAILABLE);
         double totalFee = entity.getTotalFee();
 
@@ -126,6 +126,8 @@ public class ReservationServiceImpl implements ReservationService {
 
             entity.getBookItemEntities().add(bookItem);
             entity.setTotalFee(totalFee);
+        } else {
+            throw new BusinessException("NONE", "This book does't have available bookitems.");
         }
 
         return this.updateReservation(entity);
@@ -148,15 +150,14 @@ public class ReservationServiceImpl implements ReservationService {
         List<BookItemEntity> bookItems = entity.getBookItemEntities().stream().filter(item -> item.getBookId().equals(bookId)).limit(amount)
                 .collect(Collectors.toList());
 
-        double bookFee = bookDao.getBookById(bookId).getRentCost();
-        double totalFee = entity.getTotalFee() - bookItems.size() * bookFee;
-
         bookItems.forEach(item -> {
             item.setStatus(BookItemStatus.AVAILABLE);
             bookItemDao.updateBookItem(item);
         });
 
         List<BookItemEntity> newBookItems = entity.getBookItemEntities().stream().filter(item -> !bookItems.contains(item)).collect(Collectors.toList());
+
+        double totalFee = newBookItems.stream().mapToDouble(bookItem -> bookItem.getBookEntity().getRentCost()).sum();
 
         entity.setBookItemEntities(newBookItems);
         entity.setTotalFee(totalFee);
@@ -232,7 +233,7 @@ public class ReservationServiceImpl implements ReservationService {
         entity.setBookItemEntities(new ArrayList<BookItemEntity>());
         entity.setStatus(ReservationStatus.TEMP);
 
-        return entity;
+        return reservationDao.addReservation(entity);
     }
 
     /**
@@ -324,14 +325,20 @@ public class ReservationServiceImpl implements ReservationService {
      * @throws AccessDeniedException
      */
     @Override
-    public ResultBean borrowReservation(Integer reservationId) throws LibException, AccessDeniedException {
-        ReservationEntity entity = reservationDao.getReservationById(reservationId);
+    public ResultBean borrowReservation(ReservationEntity reservation) throws LibException, AccessDeniedException {
+        ReservationEntity entity = reservationDao.getReservationById(reservation.getReservationId());
+        entity.setReservedTime(reservation.getReservedTime());
+        entity.setExpectedReturnDate(reservation.getExpectedReturnDate());
 
         if (!entity.getStatus().equals(ReservationStatus.TEMP)) {
             throw new BusinessException("402", "the book status is not temp");
         }
 
-        return this.changeReservationStatus(entity, ReservationStatus.BORROWING);
+        if (entity.getBookItemEntities().size() < 1) {
+            throw new BusinessException("402", "This cart is empty.");
+        }
+
+        return this.changeReservationStatus(entity, ReservationStatus.RESERVED);
     }
 
     /**
@@ -345,13 +352,15 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ResultBean issueReservation(Integer reservationId) throws LibException, AccessDeniedException {
         ReservationEntity entity = reservationDao.getReservationById(reservationId);
-        entity.setReservedTime(new Date());
 
-        if (!entity.getStatus().equals(ReservationStatus.BORROWING)) {
-            throw new BusinessException("402", "the book status is not borrowing");
+        if (entity == null) {
+            throw new BusinessException("ERR02", MessageUtils.getMessage("ERR02", "Reservation"));
+        }
+        if (!entity.getStatus().equals(ReservationStatus.RESERVED)) {
+            throw new BusinessException("402", "the book status is not reserved");
         }
 
-        return this.changeReservationStatus(entity, ReservationStatus.RESERVED);
+        return this.changeReservationStatus(entity, ReservationStatus.BORROWING);
     }
 
     /**
@@ -363,12 +372,17 @@ public class ReservationServiceImpl implements ReservationService {
      * @throws AccessDeniedException
      */
     @Override
-    public ResultBean returnReservation(Integer reservationId) throws LibException, AccessDeniedException {
-        ReservationEntity entity = reservationDao.getReservationById(reservationId);
-        entity.setReturnedDate(new Date());
+    public ResultBean returnReservation(ReservationEntity reservation) throws LibException, AccessDeniedException {
+        ReservationEntity entity = reservationDao.getReservationById(reservation.getReservationId());
 
-        if (!entity.getStatus().equals(ReservationStatus.RESERVED)) {
-            throw new BusinessException("402", "the book status is not reserved");
+        if (reservation.getReturnedDate() == null)
+            entity.setReturnedDate(new Date());
+        else {
+            entity.setReturnedDate(reservation.getReturnedDate());
+        }
+
+        if (!entity.getStatus().equals(ReservationStatus.BORROWING)) {
+            throw new BusinessException("402", "the book status is not borrowing");
         }
 
         List<BookItemEntity> newBookItems = entity.getBookItemEntities();
@@ -392,10 +406,13 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ResultBean cancelBorrowingReservation(Integer reservationId) throws LibException, AccessDeniedException {
         ReservationEntity entity = reservationDao.getReservationById(reservationId);
-        entity.setReturnedDate(new Date());
 
-        if (!entity.getStatus().equals(ReservationStatus.BORROWING)) {
-            throw new BusinessException("402", "the book status is not borrowing");
+        if (entity == null) {
+            throw new BusinessException("ERR02", MessageUtils.getMessage("ERR02", "Reservation"));
+        }
+
+        if (!entity.getStatus().equals(ReservationStatus.RESERVED)) {
+            throw new BusinessException("402", "the book status is not reserved");
         }
 
         List<BookItemEntity> newBookItems = entity.getBookItemEntities();
@@ -408,4 +425,35 @@ public class ReservationServiceImpl implements ReservationService {
         return this.changeReservationStatus(entity, ReservationStatus.CANCELED);
     }
 
+    /**
+     * extendReservation
+     * @author: LinhDT
+     * @param reservation
+     * @return
+     * @throws LibException
+     * @throws AccessDeniedException
+     */
+    @Override
+    public ResultBean extendReservation(ReservationEntity reservation) throws LibException, AccessDeniedException {
+        ReservationEntity entity = reservationDao.getReservationById(reservation.getReservationId());
+
+        Date newExpectedReturnDate = reservation.getExpectedReturnDate();
+
+        if (entity.getIsExtended()) {
+            throw new BusinessException("402", "the reservation must be have one time extend.");
+        }
+
+        if (newExpectedReturnDate == null || entity.getExpectedReturnDate().compareTo(newExpectedReturnDate) > 0) {
+            throw new BusinessException("402", "the new expected return date is not invalid.");
+        }
+
+        if (!entity.getStatus().equals(ReservationStatus.BORROWING)) {
+            throw new BusinessException("402", "the book status is not borrowing.");
+        }
+
+        entity.setExpectedReturnDate(newExpectedReturnDate);
+        entity.setIsExtended(true);
+
+        return new ResultBean(reservationDao.updateReservation(entity), "201", MessageUtils.getMessage("MSG04", "reservation"));
+    }
 }
